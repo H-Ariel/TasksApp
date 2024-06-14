@@ -4,7 +4,7 @@ import React from 'react';
 class EditTask extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { text: props.task.text };
+        this.state = { text: props.task.text, editing: false };
     }
 
     handleUpdateTask = () => {
@@ -13,7 +13,10 @@ class EditTask extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: this.state.text }),
         })
-            .then((response) => this.props.updateList())
+            .then((response) => {
+                this.setState({ editing: false }); // disable editing mode
+                this.props.updateList();
+            })
             .catch((error) => console.error('Error:', error));
     };
 
@@ -28,14 +31,23 @@ class EditTask extends React.Component {
     render() {
         return (
             <div>
-                <input type="text" value={this.state.text}
+                {this.state.editing ? <input type="text" value={this.state.text}
                     onChange={(e) => this.setState({ text: e.target.value })} />
-                <button onClick={this.handleUpdateTask}>Update</button>
-                <button onClick={this.handleDeleteTask}>Delete</button>
+                    : null}
+
+                {this.state.editing ? <button onClick={this.handleUpdateTask}>Update</button>
+                    : <div>
+                        <button onClick={() => this.setState({ editing: true }/* enable editing mode */)}>
+                            <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        <button onClick={this.handleDeleteTask}>
+                            <i className="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                }
             </div>
         );
     }
 }
-
 
 export default EditTask;

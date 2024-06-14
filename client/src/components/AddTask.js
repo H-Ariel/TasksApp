@@ -4,7 +4,7 @@ import React from 'react';
 class AddTask extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { text: '' };
+        this.state = { text: '', adding: false };
     }
 
     handleAddTask = () => {
@@ -15,7 +15,7 @@ class AddTask extends React.Component {
         })
             .then((response) => {
                 this.props.updateList();
-                this.setState({ text: '' });
+                this.setState({ text: '', adding: false });
             })
             .catch((error) => console.error('Error:', error));
     };
@@ -23,9 +23,19 @@ class AddTask extends React.Component {
     render() {
         return (
             <div>
-                <input type="text" placeholder="Add a new task" value={this.state.text}
-                    onChange={(e) => this.setState({ text: e.target.value })} />
-                <button onClick={this.handleAddTask}>Add</button>
+                {this.state.adding ?
+                    <input type="text" placeholder="Add a new task" value={this.state.text}
+                        onChange={(e) => this.setState({ text: e.target.value })} />
+                    : null}
+
+                {this.state.adding ?
+                    <button onClick={this.handleAddTask}>
+                        Add
+                    </button>
+                    : <button onClick={() => this.setState({ adding: true })}>
+                        <i className="fas fa-plus"></i>
+                    </button>
+                }
             </div>
         );
     }

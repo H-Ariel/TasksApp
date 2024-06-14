@@ -15,18 +15,28 @@ function App() {
 
     updateList();
 
+    let completedTasks = tasks.filter((task) => task.completed);
+    let incompletedTasks = tasks.filter((task) => !task.completed);
+
     return (
         <div>
             <h1>My Awesome Tasks App!</h1>
 
-            <h2>Tasks List</h2>
             <AddTask updateList={updateList} />
 
-            <h3>My Tasks:</h3>
-            <TasksList tasks={tasks.filter((task) => !task.completed)} updateList={updateList} />
+            {incompletedTasks.length > 0 && (
+                <div>
+                    <h2>My Tasks:</h2>
+                    <TasksList tasks={incompletedTasks} updateList={updateList} />
+                </div>
+            )}
 
-            <h3>Completed Tasks:</h3>
-            <TasksList tasks={tasks.filter((task) => task.completed)} updateList={updateList} />
+            {completedTasks.length > 0 && (
+                <div>
+                    <h2>Completed Tasks:</h2>
+                    <TasksList tasks={completedTasks} updateList={updateList} />
+                </div>
+            )}
 
         </div>
     );
