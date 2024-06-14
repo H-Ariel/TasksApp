@@ -15,11 +15,21 @@ function TasksList({ tasks, updateList }) {
         updateList();
     };
 
+    let handleCompleteTask = (task) => {
+        fetch(`/api/tasks/${task.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: true }),
+        })
+            .catch((error) => console.error('Error:', error));
+        updateList();
+    };
+
     let handleRestoreTask = (task) => {
         fetch(`/api/tasks/${task.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ deleted: false }),
+            body: JSON.stringify({ completed: false }),
         })
             //.then((response) => response.json()).then((data) => console.log(data))
             .catch((error) => console.error('Error:', error));
@@ -32,18 +42,19 @@ function TasksList({ tasks, updateList }) {
             <AddTask updateList={updateList} />
             <h3>My Tasks:</h3>
             <ul>
-                {tasks ? tasks.filter((task) => !task.deleted).map((task) => (
+                {tasks ? tasks.filter((task) => !task.completed).map((task) => (
                     <li key={task.id}>
                         {task.text}
                         <EditTask task={task} updateList={updateList} />
                         <button onClick={() => handleDeleteTask(task)}>Delete</button>
+                        <button onClick={() => handleCompleteTask(task)}>Complete</button>
                     </li>
                 )) : null}
             </ul>
 
-            <h3>Deleted Tasks:</h3>
+            <h3>Completed Tasks:</h3>
             <ul>
-                {tasks ? tasks.filter((task) => task.deleted).map((task) => (
+                {tasks ? tasks.filter((task) => task.completed).map((task) => (
                     <li key={task.id}>
                         {task.text}
                         <button onClick={() => handleRestoreTask(task)}>Restore</button>

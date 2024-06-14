@@ -7,7 +7,7 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 const port = process.env.PORT || 3001;
-const db = new MyDB.MyDB();
+const db = new MyDB.MySqliteDB();
 
 // Middleware
 app.use(express.json());
@@ -27,7 +27,7 @@ app.get('/api/data', (req, res) => {
 app.post('/api/tasks', async (req, res) => {
     try {
         const task = new MyDB.TaskObject(req.body.text);
-        db.addTask(task);
+        await db.addTask(task);
         res.status(201).json(task);
     } catch (err) {
         res.status(400).json({ error: 'Failed to create ToDo' });
@@ -37,7 +37,7 @@ app.post('/api/tasks', async (req, res) => {
 // Read all ToDos
 app.get('/api/tasks', async (req, res) => {
     try {
-        const tasks = db.getTasks();
+        const tasks = await db.getTasks();
         res.json(tasks);
     } catch (err) {
         res.status(500).json({ error: 'Failed to retrieve ToDos' });
@@ -48,16 +48,15 @@ app.get('/api/tasks', async (req, res) => {
 app.put('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const task = db.getTask(id);
+        const task = await db.getTask(id);
 
-        if (req.body.hasOwnProperty('deleted'))
-            task.deleted = req.body.deleted == 'true';
         if (req.body.hasOwnProperty('text'))
             task.text = req.body.text;
         if (req.body.hasOwnProperty('completed'))
-            task.completed = req.body.completed == 'true';
+            task.completed = req.body.completed;
 
-        db.updateTask(id, task);
+
+        await db.updateTask(id, task);
         res.json(task);
     } catch (err) {
         res.status(400).json({ error: 'Failed to update ToDo' });
@@ -68,7 +67,7 @@ app.put('/api/tasks/:id', async (req, res) => {
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        db.deleteTask(id);
+        await db.deleteTask(id);
         res.status(204).send();
     } catch (err) {
         res.status(400).json({ error: 'Failed to delete ToDo' });
