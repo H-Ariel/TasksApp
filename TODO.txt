@@ -1,0 +1,2 @@
++ sometimes it stucks, explore why and fix it
++ do not use "updateList" after change, use "setTasks" instead

@@ -132,3 +132,6 @@ dist
 # DB files
 *.sqlite
 *.db
+
+# batch file
+*.bat

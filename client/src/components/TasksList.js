@@ -7,35 +7,6 @@ function TasksList({ tasks, updateList }) {
 
     // TODO: do not use "updateList" after change, use "setTasks" instead
 
-    let handleDeleteTask = (task) => {
-        fetch(`/api/tasks/${task.id}`, {
-            method: 'DELETE'
-        })
-            .catch((error) => console.error('Error:', error));
-        updateList();
-    };
-
-    let handleCompleteTask = (task) => {
-        fetch(`/api/tasks/${task.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ completed: true }),
-        })
-            .catch((error) => console.error('Error:', error));
-        updateList();
-    };
-
-    let handleRestoreTask = (task) => {
-        fetch(`/api/tasks/${task.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ completed: false }),
-        })
-            //.then((response) => response.json()).then((data) => console.log(data))
-            .catch((error) => console.error('Error:', error));
-        updateList();
-    };
-
     return (
         <div>
             <h2>Tasks List</h2>
@@ -46,8 +17,6 @@ function TasksList({ tasks, updateList }) {
                     <li key={task.id}>
                         {task.text}
                         <EditTask task={task} updateList={updateList} />
-                        <button onClick={() => handleDeleteTask(task)}>Delete</button>
-                        <button onClick={() => handleCompleteTask(task)}>Complete</button>
                     </li>
                 )) : null}
             </ul>
@@ -57,7 +26,7 @@ function TasksList({ tasks, updateList }) {
                 {tasks ? tasks.filter((task) => task.completed).map((task) => (
                     <li key={task.id}>
                         {task.text}
-                        <button onClick={() => handleRestoreTask(task)}>Restore</button>
+                        <EditTask task={task} updateList={updateList} />
                     </li>
                 )) : null}
             </ul>

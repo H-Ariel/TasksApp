@@ -27,7 +27,9 @@ app.get('/api/data', (req, res) => {
 app.post('/api/tasks', async (req, res) => {
     try {
         const task = new MyDB.TaskObject(req.body.text);
+        console.log('create task:', task);
         await db.addTask(task);
+        console.log('ok');
         res.status(201).json(task);
     } catch (err) {
         res.status(400).json({ error: 'Failed to create ToDo' });
@@ -49,14 +51,13 @@ app.put('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const task = await db.getTask(id);
-
+        console.log('update task:', task);
         if (req.body.hasOwnProperty('text'))
             task.text = req.body.text;
         if (req.body.hasOwnProperty('completed'))
             task.completed = req.body.completed;
-
-
         await db.updateTask(id, task);
+        console.log('ok');
         res.json(task);
     } catch (err) {
         res.status(400).json({ error: 'Failed to update ToDo' });
@@ -67,7 +68,9 @@ app.put('/api/tasks/:id', async (req, res) => {
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        console.log('delete task:', id);
         await db.deleteTask(id);
+        console.log('ok');
         res.status(204).send();
     } catch (err) {
         res.status(400).json({ error: 'Failed to delete ToDo' });
