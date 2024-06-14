@@ -7,10 +7,6 @@ class AddTask extends React.Component {
         this.state = { text: '' };
     }
 
-    handleInputChange = (e) => {
-        this.setState({ text: e.target.value });
-    };
-
     handleAddTask = () => {
         fetch('/api/tasks', {
             method: 'POST',
@@ -18,7 +14,6 @@ class AddTask extends React.Component {
             body: JSON.stringify({ text: this.state.text })
         })
             .then((response) => {
-                console.log(response.json());
                 this.props.updateList();
                 this.setState({ text: '' });
             })

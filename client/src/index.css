@@ -8,3 +8,21 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.tasks-list {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+}
+
+.task-checkbox {
+  margin-right: 10px; /* Space between checkbox and text */
+}
+
+.task-text {
+  flex-grow: 1;
+}

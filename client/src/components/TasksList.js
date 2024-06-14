@@ -1,34 +1,34 @@
 import React from 'react';
-import AddTask from './AddTask';
 import EditTask from './EditTask';
 
 
+function TaskInList({ task, updateList }) {
+    let setCompleted = (completed) => {
+        fetch(`/api/tasks/${task.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed }),
+        })
+            .then((response) => updateList())
+            .catch((error) => console.error('Error:', error));
+    };
+
+    return <li className='task-item'>
+        {/* checkbox to toggle the task's "completed" status*/}
+        <input className='task-checkbox' type='checkbox' checked={task.completed}
+            onChange={(e) => setCompleted(e.target.checked)} />
+        {/* task text */}
+        <span className='task-text'>{task.text}</span>
+        <EditTask task={task} updateList={updateList} />
+    </li>
+}
+
 function TasksList({ tasks, updateList }) {
-
-    // TODO: do not use "updateList" after change, use "setTasks" instead
-
+    // TODO: do not use 'updateList' after change, use 'setTasks' instead
     return (
         <div>
-            <h2>Tasks List</h2>
-            <AddTask updateList={updateList} />
-            <h3>My Tasks:</h3>
-            <ul>
-                {tasks ? tasks.filter((task) => !task.completed).map((task) => (
-                    <li key={task.id}>
-                        {task.text}
-                        <EditTask task={task} updateList={updateList} />
-                    </li>
-                )) : null}
-            </ul>
-
-            <h3>Completed Tasks:</h3>
-            <ul>
-                {tasks ? tasks.filter((task) => task.completed).map((task) => (
-                    <li key={task.id}>
-                        {task.text}
-                        <EditTask task={task} updateList={updateList} />
-                    </li>
-                )) : null}
+            <ul className='tasks-list'>
+                {tasks.map((task) => <TaskInList key={task.id} task={task} updateList={updateList} />)}
             </ul>
         </div>
     );

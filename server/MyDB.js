@@ -1,4 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 const fs = require('fs');
 
 
@@ -9,7 +9,7 @@ class TaskObject {
     }
 }
 
-// add class SqliteDB
+
 class MySqliteDB {
     constructor() {
         let exists = fs.existsSync('tasksdb.sqlite'); // if the file exists, do not initialize the database
@@ -24,8 +24,7 @@ class MySqliteDB {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     text TEXT NOT NULL,
                     completed BOOLEAN NOT NULL DEFAULT 0
-                )
-            `);
+                )`);
 
             this.addTask(new TaskObject('Learn React'));
             this.addTask(new TaskObject('Learn Node.js'));
@@ -90,21 +89,6 @@ class MySqliteDB {
     }
 
     deleteTask(id) {
-        /*
-        return new Promise((resolve, reject) => {
-            const stmt = this.db.prepare('UPDATE tasks SET deleted = 1 WHERE id = ?');
-            stmt.run(id, function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-            stmt.finalize();
-        });
-        */
-
-        // delete totaly (not just mark as deleted)
         return new Promise((resolve, reject) => {
             const stmt = this.db.prepare('DELETE FROM tasks WHERE id = ?');
             stmt.run(id, function (err) {
@@ -118,7 +102,6 @@ class MySqliteDB {
         });
     }
 }
-
 
 
 module.exports = { TaskObject, MySqliteDB };
