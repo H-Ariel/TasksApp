@@ -1,45 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TasksList from './components/TasksList';
 import AddTask from './components/AddTask';
 
 
-function App() {
-    const [tasks, setTasks] = useState([]);
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { tasks: [] };
+        this.updateList = this.updateList.bind(this);
+    }
 
-    let updateList = function () {
+    componentDidMount() { this.updateList(); }
+
+    // TODO: do not use 'updateList' every change, use 'setTasks' in some cases
+    updateList() {
         fetch('/api/tasks')
             .then((response) => response.json())
-            .then((tasks) => setTasks(tasks));
-    };
+            .then((tasks) => this.setState({ tasks }));
+    }
 
+    render() {
+        const { tasks } = this.state;
+        let completedTasks = tasks.filter((task) => task.completed);
+        let incompletedTasks = tasks.filter((task) => !task.completed);
 
-    updateList();
+        return (
+            <div>
+                <h1>My Awesome Tasks App!</h1>
 
-    let completedTasks = tasks.filter((task) => task.completed);
-    let incompletedTasks = tasks.filter((task) => !task.completed);
+                <AddTask updateList={this.updateList} />
 
-    return (
-        <div>
-            <h1>My Awesome Tasks App!</h1>
+                {incompletedTasks.length > 0 && (
+                    <div>
+                        <h2>My Tasks:</h2>
+                        <TasksList tasks={incompletedTasks} updateList={this.updateList} />
+                    </div>
+                )}
 
-            <AddTask updateList={updateList} />
-
-            {incompletedTasks.length > 0 && (
-                <div>
-                    <h2>My Tasks:</h2>
-                    <TasksList tasks={incompletedTasks} updateList={updateList} />
-                </div>
-            )}
-
-            {completedTasks.length > 0 && (
-                <div>
-                    <h2>Completed Tasks:</h2>
-                    <TasksList tasks={completedTasks} updateList={updateList} />
-                </div>
-            )}
-
-        </div>
-    );
+                {completedTasks.length > 0 && (
+                    <div>
+                        <h2>Completed Tasks:</h2>
+                        <TasksList tasks={completedTasks} updateList={this.updateList} />
+                    </div>
+                )}
+            </div>
+        );
+    }
 }
 
 export default App;

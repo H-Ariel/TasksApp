@@ -36,14 +36,16 @@ input[type="text"]:focus {
   border-color: #00796b;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   outline: none;
+  display: inline-block;
 }
 
 button {
   background-color: #00796b;
   color: white;
   border: none;
-  padding: 10px 20px;
-  margin: 5px;
+  min-width:35px;
+  padding: 10px;
+  margin: 2px;
   border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
@@ -55,6 +57,10 @@ button {
 button:hover {
   background-color: #004d40;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task-checkbox {
+  margin-right: 15px;
 }
 
 #root {
@@ -86,10 +92,6 @@ button:hover {
 
 .task-item:hover {
   transform: translateY(-2px);
-}
-
-.task-checkbox {
-  margin-right: 15px;
 }
 
 .task-text {

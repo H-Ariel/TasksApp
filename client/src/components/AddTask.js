@@ -21,23 +21,16 @@ class AddTask extends React.Component {
     };
 
     render() {
-        return (
-            <div>
-                {this.state.adding ?
-                    <input type="text" placeholder="Add a new task" value={this.state.text}
-                        onChange={(e) => this.setState({ text: e.target.value })} />
-                    : null}
+        return (<div>
+            <button onClick={this.handleAddTask}>
+                <i className="fa fa-plus fa-sm"></i>
+            </button>
+            <input type="text" placeholder="Add a new task" value={this.state.text}
+                onChange={(e) => this.setState({ text: e.target.value })}
+                onKeyPress={(e) => { if (e.key === 'Enter') this.handleAddTask(); }}
+            />
+        </div>);
 
-                {this.state.adding ?
-                    <button onClick={this.handleAddTask}>
-                        Add
-                    </button>
-                    : <button onClick={() => this.setState({ adding: true })}>
-                        <i className="fas fa-plus"></i>
-                    </button>
-                }
-            </div>
-        );
     }
 }
 
