@@ -22,25 +22,24 @@ app.get('/api/data', (req, res) => {
 // Create a new task
 app.post('/api/tasks', async (req, res) => {
     try {
-        const task = new MyDB.TaskObject(req.body.text);
-        await db.addTask(task);
+        const task = await db.addTask(new MyDB.TaskObject(req.body.text));
         res.status(201).json(task);
     } catch (err) {
-        res.status(400).json({ error: 'Failed to create ToDo' });
+        res.status(400).json({ error: 'Failed to create Task' });
     }
 });
 
-// Read all ToDos
+// Read all Tasks
 app.get('/api/tasks', async (req, res) => {
     try {
         const tasks = await db.getTasks();
         res.json(tasks);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to retrieve ToDos' });
+        res.status(500).json({ error: 'Failed to retrieve Tasks' });
     }
 });
 
-// Update a ToDo
+// Update a Task
 app.put('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -52,18 +51,18 @@ app.put('/api/tasks/:id', async (req, res) => {
         await db.updateTask(id, task);
         res.json(task);
     } catch (err) {
-        res.status(400).json({ error: 'Failed to update ToDo' });
+        res.status(400).json({ error: 'Failed to update Task' });
     }
 });
 
-// Delete a ToDo
+// Delete a Task
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
         const { id } = req.params;
         await db.deleteTask(id);
         res.status(204).send();
     } catch (err) {
-        res.status(400).json({ error: 'Failed to delete ToDo' });
+        res.status(400).json({ error: 'Failed to delete Task' });
     }
 });
 
