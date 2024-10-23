@@ -10,7 +10,7 @@ class TaskObject {
 }
 
 
-class MySqliteDB {
+class TasksSqliteDB {
     constructor() {
         let exists = fs.existsSync('tasksdb.sqlite'); // if the file exists, do not initialize the database
         this.db = new sqlite3.Database('tasksdb.sqlite');
@@ -104,4 +104,4 @@ class MySqliteDB {
 }
 
 
-module.exports = { TaskObject, MySqliteDB };
+module.exports = { TaskObject, TasksSqliteDB };

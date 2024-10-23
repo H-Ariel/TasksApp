@@ -1,9 +1,9 @@
 const express = require('express');
-const MyDB = require('./MyDB');
+const { TasksSqliteDB, TaskObject } = require('./TasksDB.js');
 
 const port = 3001;
 const app = express();
-const db = new MyDB.MySqliteDB();
+const db = new TasksSqliteDB();
 
 
 // Middleware
@@ -13,14 +13,13 @@ app.use(express.json());
 // Define routes
 app.get('/', (req, res) => {
     res.send('This is the root route. Please use /api/tasks to access the tasks');
-    //res.redirect("http://localhost:3000");
 });
 
 
 // Define CRUD operations
 // Create a new task
 app.post('/api/tasks', async (req, res) =>
-    db.addTask(new MyDB.TaskObject(req.body.text))
+    db.addTask(new TaskObject(req.body.text))
         .then((task) => res.status(201).json(task))
         .catch((err) => res.status(400).json({ error: 'Failed to create Task' }))
 );

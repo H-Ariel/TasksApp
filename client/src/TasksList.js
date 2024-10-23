@@ -48,7 +48,11 @@ class TaskInList extends React.Component {
                     onBlur={this.updateText}
                     onKeyDown={(e) => { if (e.key === 'Enter') this.updateText(); }}
                     autoFocus />
-                    : <span className='task-text' onClick={() => this.setState({ editing: true })}>{task.text}</span>
+                    :
+                    <span className={`task-text ${task.completed ? 'completed' : ''}`}
+                        onClick={() => this.setState({ editing: true })}>
+                        {task.text}
+                    </span>
                 }
 
                 {/* edit and delete buttons */}
